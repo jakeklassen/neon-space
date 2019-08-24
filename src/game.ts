@@ -1,10 +1,20 @@
-const DEG_TO_RAD = Math.PI / 180;
-const cache: { [key: string]: CanvasImageSource } = {};
+import { World } from '@jakeklassen/ecs';
+import MainLoop from 'mainloop.js';
+import { Transform2d } from './components/transform2d';
+import { Vector2d } from './lib/vector2d';
+import { Sprite } from './components/sprite';
+import { RenderingSystem } from './systems/rendering-system';
+import { DEG_TO_RAD, clamp } from './lib/math';
+import { Velocity2d } from './components/velocity2d';
+import { MovementSystem } from './systems/movement-system';
+import { Rotator } from './components/rotator';
+import { RotationSystem } from './systems/rotation-system';
 
-let mouse = { x: 0, y: 0 };
+type Cache = {
+  [key: string]: CanvasImageSource;
+};
 
-const clamp = (number: number, min: number, max: number) =>
-  Math.max(min, Math.min(number, max));
+const cache: Cache = {};
 
 // Setup the main canvas
 const canvas = document.getElementById('mainCanvas')! as HTMLCanvasElement;
@@ -17,9 +27,6 @@ canvas.style.left =
   window.innerWidth / 2 - parseInt(canvas.style.width) / 2 + 'px';
 canvas.style.top =
   window.innerHeight / 2 - parseInt(canvas.style.height) / 2 + 'px';
-
-// Listeners
-canvas.onmousemove = onMouseMove;
 
 // Buffer canvas
 // Used to generate and save our entities
@@ -56,75 +63,52 @@ bufferCtx.shadowBlur = 6;
 
 document.body.appendChild(bufferCanvas);
 
-generateImages();
+generateImages(cache);
 
-const player = cache.player as CanvasImageSource;
-const shipNav = cache.shipNavigator;
-const square = cache.square;
+const world = new World();
 
-let time = 0;
-let pastTime = performance.now();
-let dt = 0;
+const player = world.createEntity();
+const shipNavigator = world.createEntity();
+const square = world.createEntity();
 
-function frame(hrt: DOMHighResTimeStamp) {
-  requestAnimationFrame(frame);
+world.addEntityComponents(
+  player,
+  new Transform2d(new Vector2d(canvas.width / 2, canvas.height / 2)),
+  new Sprite(cache.player),
+);
 
-  // In seconds
-  dt = (hrt - pastTime) / 1000;
+world.addEntityComponents(
+  shipNavigator,
+  new Transform2d(new Vector2d(canvas.width / 2, canvas.height / 2)),
+  new Sprite(cache.shipNavigator),
+  new Velocity2d(0, 0),
+  new Rotator(5),
+);
 
-  // Clear canvas
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+world.addEntityComponents(
+  square,
+  new Transform2d(new Vector2d(0, canvas.height / 2)),
+  new Sprite(cache.square),
+  new Velocity2d(150, 0),
+  new Rotator(8),
+);
 
-  ctx.globalCompositeOperation = 'normal';
-  ctx.fillStyle = '#FFFFFF';
-  ctx.font = '20px Visitor';
-  ctx.fillText(`Mouse: ${mouse.x}, ${mouse.y}`, 10, 20);
-
-  ctx.globalCompositeOperation = 'lighter';
-  ctx.translate(canvas.width / 2, canvas.height / 2);
-  ctx.drawImage(
-    player,
-    -player.width / 2,
-    -player.height / 2,
-    player.width as number,
-    player.height as number,
-  );
-
-  // Rotate navigator to look at mouse
-  let targetX = mouse.x - canvas.width / 2,
-    targetY = mouse.y - canvas.height / 2,
-    rotation = Math.atan2(targetY, targetX);
-
-  ctx.rotate(rotation);
-  ctx.drawImage(
-    shipNav,
-    -shipNav.width / 2,
-    -shipNav.height / 2,
-    shipNav.width as number,
-    shipNav.height as number,
-  );
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-
-  ctx.translate(hrt / 10, canvas.height / 2);
-  ctx.rotate(hrt * 0.1);
-
-  ctx.drawImage(
-    square,
-    -square.width / 2,
-    -square.height / 2,
-    square.width as number,
-    square.height as number,
-  );
-
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-
-  pastTime = hrt;
-}
-
-requestAnimationFrame(frame);
+world.addSystem(new MovementSystem());
+world.addSystem(new RotationSystem());
+world.addSystem(new RenderingSystem(canvas));
 
 // Used to create and store images
-function generateImages() {
+function generateImages(cache: Cache) {
+  const bufferCanvas = document.createElement('canvas');
+  bufferCanvas.width = 64;
+  bufferCanvas.height = 64;
+
+  const bufferCtx = bufferCanvas.getContext('2d')!;
+  bufferCtx.imageSmoothingEnabled = false;
+  bufferCtx.globalCompositeOperation = 'lighter';
+  bufferCtx.shadowColor = 'red';
+  bufferCtx.shadowBlur = 6;
+
   // Square
   bufferCtx.globalAlpha = 0.5;
   bufferCtx.strokeStyle = 'white';
@@ -202,33 +186,6 @@ function generateImages() {
   bufferCtx.clearRect(0, 0, bufferCanvas.width, bufferCanvas.height);
 }
 
-function onMouseMove(e: MouseEvent) {
-  var computedStyle = window.getComputedStyle(e.target as Element, null);
-  var topBorder = parseInt(
-    computedStyle.getPropertyValue('border-top-width'),
-    10,
-  );
-  var leftBorder = parseInt(
-    computedStyle.getPropertyValue('border-left-width'),
-    10,
-  );
-  var rect = (e.target as Element).getBoundingClientRect();
-  var pos = {
-    x: clamp(
-      e.clientX - rect.left - leftBorder,
-      0,
-      parseFloat((e.target as Element).getAttribute('width')!),
-    ),
-    y: clamp(
-      e.clientY - rect.top - topBorder,
-      0,
-      parseFloat((e.target as Element).getAttribute('height')!),
-    ),
-  };
-
-  mouse = pos;
-}
-
-export var game = {
-  name: 'Canvas Game',
-};
+MainLoop.setUpdate((dt: number) => {
+  world.updateSystems(dt / 1000);
+}).start();
