@@ -11,8 +11,8 @@ const canvas = document.getElementById('mainCanvas')! as HTMLCanvasElement;
 canvas.style.position = 'absolute';
 canvas.style.border = 'thick solid lightGray';
 // Scale with css!
-canvas.style.width = '1024px';
-canvas.style.height = '768px';
+canvas.style.width = `${1024}px`;
+canvas.style.height = `${768}px`;
 canvas.style.left =
   window.innerWidth / 2 - parseInt(canvas.style.width) / 2 + 'px';
 canvas.style.top =
