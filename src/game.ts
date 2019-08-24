@@ -90,7 +90,7 @@ world.addEntityComponents(
   new Transform2d(new Vector2d(0, canvas.height / 2)),
   new Sprite(cache.square),
   new Velocity2d(150, 0),
-  new Rotator(8),
+  new Rotator(5),
 );
 
 world.addSystem(new MovementSystem());
