@@ -60,6 +60,19 @@ bufferCtx.imageSmoothingEnabled = false;
 bufferCtx.globalCompositeOperation = 'lighter';
 bufferCtx.shadowColor = 'red';
 bufferCtx.shadowBlur = 6;
+bufferCanvas.style.backgroundColor = 'transparent';
+
+// Square
+bufferCtx.globalAlpha = 0.5;
+bufferCtx.strokeStyle = 'white';
+bufferCtx.lineWidth = 5;
+bufferCtx.strokeRect(15, 15, 34, 34);
+
+// Overlay
+bufferCtx.globalAlpha = 0.8;
+bufferCtx.strokeStyle = 'blue';
+bufferCtx.lineWidth = 8;
+bufferCtx.strokeRect(15, 15, 34, 34);
 
 document.body.appendChild(bufferCanvas);
 
