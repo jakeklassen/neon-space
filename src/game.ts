@@ -34,7 +34,6 @@ const bufferCanvas = document.createElement('canvas');
 bufferCanvas.width = 64;
 bufferCanvas.height = 64;
 bufferCanvas.style.position = 'absolute';
-bufferCanvas.style.border = 'thick solid lightGray';
 bufferCanvas.style.left = bufferCanvas.style.top = '0px';
 
 bufferCanvas.onclick = function() {
