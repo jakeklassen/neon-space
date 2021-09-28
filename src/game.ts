@@ -52,7 +52,7 @@ bufferCanvas.onclick = function() {
 };
 
 // Contexts
-const ctx = canvas.getContext('2d', { alpha: false })!;
+const ctx = canvas.getContext('2d')!;
 ctx.imageSmoothingEnabled = true;
 
 const bufferCtx = bufferCanvas.getContext('2d')!;
