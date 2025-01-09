@@ -10,7 +10,7 @@ importers:
     dependencies:
       '@jakeklassen/ecs':
         specifier: ^4.0.7
-        version: 4.0.7(postcss@8.4.49)(typescript@5.7.2)(yaml@2.4.2)
+        version: 4.0.7(postcss@8.4.49)(typescript@5.7.3)(yaml@2.4.2)
       contro:
         specifier: ^2.2.0
         version: 2.2.0
@@ -25,8 +25,8 @@ importers:
         specifier: ^3.4.2
         version: 3.4.2
       typescript:
-        specifier: ^5.7.2
-        version: 5.7.2
+        specifier: ^5.7.3
+        version: 5.7.3
       vite:
         specifier: ^6.0.7
         version: 6.0.7(yaml@2.4.2)
@@ -629,8 +629,8 @@ packages:
     resolution: {integrity: sha512-yOGpmOAL7CkKe/91I5O3gPICmJNLJ1G4zFYVAsRHg7M64biSnPtRj0WNQt++bRkjYOqjWXrhnUw1utzmVErAdg==}
     engines: {node: '>=16'}
 
-  typescript@5.7.2:
-    resolution: {integrity: sha512-i5t66RHxDvVN40HfDd1PsEThGNnlMCMT3jMUuoh9/0TaqWevNontacunWyN02LA9/fIbEWlcHZcgTKb9QoaLfg==}
+  typescript@5.7.3:
+    resolution: {integrity: sha512-84MVSjMEHP+FQRPy3pX9sTVV/INIex71s9TL2Gm5FG/WG1SqXeKyZ0k7/blY/4FdOzI12CBy1vGc4og/eus0fw==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -784,9 +784,9 @@ snapshots:
       wrap-ansi: 8.1.0
       wrap-ansi-cjs: wrap-ansi@7.0.0
 
-  '@jakeklassen/ecs@4.0.7(postcss@8.4.49)(typescript@5.7.2)(yaml@2.4.2)':
+  '@jakeklassen/ecs@4.0.7(postcss@8.4.49)(typescript@5.7.3)(yaml@2.4.2)':
     dependencies:
-      tsup: 8.3.5(postcss@8.4.49)(typescript@5.7.2)(yaml@2.4.2)
+      tsup: 8.3.5(postcss@8.4.49)(typescript@5.7.3)(yaml@2.4.2)
       type-fest: 4.26.1
     transitivePeerDependencies:
       - '@microsoft/api-extractor'
@@ -1155,7 +1155,7 @@ snapshots:
 
   ts-interface-checker@0.1.13: {}
 
-  tsup@8.3.5(postcss@8.4.49)(typescript@5.7.2)(yaml@2.4.2):
+  tsup@8.3.5(postcss@8.4.49)(typescript@5.7.3)(yaml@2.4.2):
     dependencies:
       bundle-require: 5.1.0(esbuild@0.24.2)
       cac: 6.7.14
@@ -1175,7 +1175,7 @@ snapshots:
       tree-kill: 1.2.2
     optionalDependencies:
       postcss: 8.4.49
-      typescript: 5.7.2
+      typescript: 5.7.3
     transitivePeerDependencies:
       - jiti
       - supports-color
@@ -1184,7 +1184,7 @@ snapshots:
 
   type-fest@4.26.1: {}
 
-  typescript@5.7.2: {}
+  typescript@5.7.3: {}
 
   vite@6.0.7(yaml@2.4.2):
     dependencies:
